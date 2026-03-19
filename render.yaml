@@ -1,0 +1,17 @@
+# Render.com Blueprint — connect GitHub repo, then "New Blueprint Instance"
+# https://render.com/docs/blueprint-spec
+services:
+  - type: web
+    name: friends-game-hub
+    runtime: node
+    plan: free
+    region: oregon
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_VERSION
+        value: "20"
+      # After first deploy, set this in Render dashboard to your live URL, e.g. https://friends-game-hub.onrender.com
+      - key: PUBLIC_URL
+        sync: false

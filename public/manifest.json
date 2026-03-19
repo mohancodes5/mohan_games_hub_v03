@@ -1,0 +1,9 @@
+{
+  "name": "Friends Game Hub",
+  "short_name": "Game Hub",
+  "description": "Solo and multiplayer mini-games",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0c0c0e",
+  "theme_color": "#0c0c0e"
+}

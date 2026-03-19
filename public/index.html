@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#0c0c0e" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <title>Game Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <div class="app">
+      <header class="topbar">
+        <button type="button" class="btn ghost back-btn hidden" id="btnBack" aria-label="Back">←</button>
+        <h1 class="logo">Game Hub</h1>
+        <span class="spacer"></span>
+      </header>
+
+      <main class="main">
+        <!-- Home -->
+        <section id="screenHome" class="screen active">
+          <p class="tagline">Solo or play with friends using a room code</p>
+          <div class="card-stack">
+            <button type="button" class="card-btn primary" id="btnSolo">
+              <span class="card-title">Play solo</span>
+              <span class="card-sub">Draw, find, reflex & memory</span>
+            </button>
+            <button type="button" class="card-btn secondary" id="btnFriends">
+              <span class="card-title">Play with friends</span>
+              <span class="card-sub">Create or join a room</span>
+            </button>
+          </div>
+          <button type="button" class="link-btn" id="btnHowTo">How to use on phone</button>
+        </section>
+
+        <!-- How to -->
+        <section id="screenHowTo" class="screen">
+          <div class="info-box">
+            <h2>Play anywhere (recommended)</h2>
+            <ol class="steps">
+              <li>Deploy this app once to the internet (free): open <code>DEPLOY.md</code> in the project folder and follow <strong>Render</strong> steps.</li>
+              <li>You get a link like <code>https://your-game.onrender.com</code> — open it on <strong>any phone</strong> (Wi‑Fi or mobile data).</li>
+              <li>Bookmark it or use <strong>Add to Home Screen</strong> so it feels like an app.</li>
+              <li>With friends: share that <strong>same link</strong>. One taps <strong>Create room</strong> and sends the 6‑letter code; the other taps <strong>Join room</strong>.</li>
+            </ol>
+            <h2 class="subhead-inline">At home only (no deploy)</h2>
+            <ol class="steps">
+              <li>PC: <code>npm install</code> then <code>npm start</code>.</li>
+              <li>Phone on same Wi‑Fi: <code>http://YOUR_PC_IP:3000</code> (see <code>ipconfig</code> for IPv4).</li>
+            </ol>
+            <p class="hint">Free cloud hosting may “sleep” when idle; the first open after a while can take ~30–60s, then it’s normal.</p>
+          </div>
+        </section>
+
+        <!-- Solo menu -->
+        <section id="screenSoloMenu" class="screen">
+          <h2 class="screen-title">Solo games</h2>
+          <div class="card-stack">
+            <button type="button" class="card-btn" id="btnDraw">
+              <span class="card-title">Free draw</span>
+              <span class="card-sub">Doodle with no time limit</span>
+            </button>
+            <button type="button" class="card-btn" id="btnFind">
+              <span class="card-title">Find them all</span>
+              <span class="card-sub">Tap every target — no timer</span>
+            </button>
+            <button type="button" class="card-btn" id="btnReflex">
+              <span class="card-title">Reflex tap</span>
+              <span class="card-sub">Tap when green — best time wins</span>
+            </button>
+            <button type="button" class="card-btn" id="btnMemory">
+              <span class="card-title">Memory match</span>
+              <span class="card-sub">Find all pairs — no time limit</span>
+            </button>
+          </div>
+        </section>
+
+        <!-- Free draw -->
+        <section id="screenDraw" class="screen">
+          <h2 class="screen-title">Free draw</h2>
+          <p class="game-hint">No time limit — sketch as long as you like.</p>
+          <div class="draw-toolbar">
+            <label class="draw-label">Color <input type="color" id="drawColor" value="#38bdf8" /></label>
+            <label class="draw-label">Size <input type="range" id="drawSize" min="2" max="28" value="5" /></label>
+            <button type="button" class="btn secondary" id="btnDrawClear">Clear</button>
+          </div>
+          <div class="draw-wrap">
+            <canvas id="drawCanvas" width="320" height="320"></canvas>
+          </div>
+        </section>
+
+        <!-- Find them all -->
+        <section id="screenFind" class="screen">
+          <h2 class="screen-title">Find them all</h2>
+          <p class="game-hint">Tap every <span id="findTargetEmoji" class="find-target-emoji"></span> — take your time, no countdown.</p>
+          <p class="find-progress" id="findProgress">Found: 0 / 0</p>
+          <div class="find-grid" id="findGrid"></div>
+          <p class="find-msg" id="findMsg"></p>
+          <button type="button" class="btn primary wide" id="btnFindNew">New board</button>
+        </section>
+
+        <!-- Reflex game -->
+        <section id="screenReflex" class="screen">
+          <h2 class="screen-title">Reflex</h2>
+          <p class="reflex-hint" id="reflexHint">Tap “Start” — then tap as soon as the button turns green.</p>
+          <button type="button" class="reflex-target" id="reflexBtn">Start</button>
+          <p class="reflex-result" id="reflexResult"></p>
+        </section>
+
+        <!-- Memory game -->
+        <section id="screenMemory" class="screen">
+          <h2 class="screen-title">Memory</h2>
+          <p class="memory-stats" id="memoryStats">Moves: 0</p>
+          <div class="memory-grid" id="memoryGrid"></div>
+          <p class="memory-msg" id="memoryMsg"></p>
+        </section>
+
+        <!-- Friends: create / join -->
+        <section id="screenFriends" class="screen">
+          <label class="field">
+            <span>Your name</span>
+            <input type="text" id="inputName" maxlength="12" placeholder="e.g. Alex" autocomplete="nickname" />
+          </label>
+          <div class="card-stack tight">
+            <button type="button" class="card-btn primary" id="btnCreateRoom">Create room</button>
+            <button type="button" class="card-btn secondary" id="btnShowJoin">Join room</button>
+          </div>
+          <div id="joinPanel" class="join-panel hidden">
+            <label class="field">
+              <span>Room code</span>
+              <input
+                type="text"
+                id="inputRoom"
+                maxlength="6"
+                placeholder="ABC123"
+                autocomplete="off"
+                autocapitalize="characters"
+              />
+            </label>
+            <button type="button" class="btn primary wide" id="btnJoinRoom">Join</button>
+            <p class="error" id="joinError"></p>
+          </div>
+        </section>
+
+        <!-- Room lobby -->
+        <section id="screenRoom" class="screen">
+          <div class="room-code-box">
+            <span class="label">Room code</span>
+            <div class="room-code" id="displayRoomId">———</div>
+            <button type="button" class="btn small" id="btnCopyCode">Copy code</button>
+          </div>
+          <p class="players" id="roomPlayers"></p>
+          <p class="status" id="roomStatus">Waiting for friend…</p>
+          <div id="hostGamePick" class="hidden">
+            <h3 class="subhead">Choose game (host)</h3>
+            <div class="card-stack tight">
+              <button type="button" class="card-btn" data-game="drawGuess">Draw &amp; guess</button>
+              <button type="button" class="card-btn" data-game="ttt">Tic‑Tac‑Toe</button>
+              <button type="button" class="card-btn" data-game="rps">Rock Paper Scissors</button>
+            </div>
+          </div>
+          <button type="button" class="btn danger wide" id="btnLeaveRoom">Leave room</button>
+        </section>
+
+        <!-- Tic tac toe -->
+        <section id="screenTtt" class="screen">
+          <h2 class="screen-title">Tic‑Tac‑Toe</h2>
+          <p class="ttt-status" id="tttStatus"></p>
+          <div class="ttt-grid" id="tttGrid"></div>
+          <button type="button" class="btn secondary wide" id="btnBackLobby">Back to lobby</button>
+        </section>
+
+        <!-- RPS -->
+        <section id="screenRps" class="screen">
+          <h2 class="screen-title">Rock Paper Scissors</h2>
+          <p class="rps-score" id="rpsScore">First to 3 wins</p>
+          <p class="rps-status" id="rpsStatus"></p>
+          <div class="rps-buttons" id="rpsButtons">
+            <button type="button" class="rps-btn" data-pick="rock">Rock</button>
+            <button type="button" class="rps-btn" data-pick="paper">Paper</button>
+            <button type="button" class="rps-btn" data-pick="scissors">Scissors</button>
+          </div>
+          <p class="rps-reveal" id="rpsReveal"></p>
+          <button type="button" class="btn secondary wide" id="btnBackLobby2">Back to lobby</button>
+        </section>
+
+        <!-- Draw & guess (multiplayer) -->
+        <section id="screenDrawGuess" class="screen">
+          <h2 class="screen-title">Draw &amp; guess</h2>
+          <p class="dg-score" id="dgScore">0 — 0 · First to 3</p>
+          <p class="dg-status" id="dgStatus"></p>
+          <p class="dg-timer" id="dgTimer"></p>
+          <div class="dg-draw-toolbar" id="dgDrawToolbar">
+            <label class="draw-label">Color <input type="color" id="dgColor" value="#e4e4e7" /></label>
+            <label class="draw-label">Brush <input type="range" id="dgBrush" min="2" max="22" value="6" /></label>
+          </div>
+          <div class="draw-wrap dg-canvas-wrap">
+            <canvas id="mpDrawCanvas" width="300" height="300"></canvas>
+          </div>
+          <div id="dgGuessRow" class="dg-guess-row hidden">
+            <input type="text" id="dgGuessInput" maxlength="40" placeholder="Type your guess…" autocomplete="off" />
+            <button type="button" class="btn primary" id="dgGuessBtn">Guess</button>
+          </div>
+          <p class="dg-wrong" id="dgWrong"></p>
+          <p class="dg-result" id="dgResult"></p>
+          <button type="button" class="btn secondary wide" id="btnBackLobbyDraw">Back to lobby</button>
+        </section>
+      </main>
+    </div>
+
+    <div id="drawWordModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="drawModalTitle">
+      <div class="modal-card">
+        <h3 id="drawModalTitle" class="modal-title">What will you draw?</h3>
+        <p class="modal-desc">Choose one from the random options. Your drawing time starts after you pick — your friend only sees your drawing.</p>
+        <div class="modal-choices" id="drawWordChoices"></div>
+      </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/app.js"></script>
+  </body>
+</html>
